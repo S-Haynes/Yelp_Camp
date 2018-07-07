@@ -1,9 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Questrial');
+
+* {
+	font-family: Questrial, sans-serif;
+}
 html, body {
 	width: 100%;
 	height: 100%;
 	padding: 0;
 	margin: 0;
 	position: relative;
+	z-index: -1;
 }
 
 .inline {
@@ -16,5 +22,100 @@ html, body {
 
 .thumbnail img {
 	width: 100%;
+}
+
+.thumbnail.index img {
+	height: 150px;
+}
+
+.home {
+	display: flex;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: #232323;
+	z-index: -1;
+}
+
+.home .container {
+	flex: 1;
+	margin: auto;
+}
+
+.home .container{
+
+	color: #fff;
+	z-index: 1;
+}
+.home h3, .home h1 {
+	text-shadow: 2px 4px 2px #232323;
+	margin: 0;
+}
+
+.home h1 {
+	margin-bottom: 10px;
+	font-size: calc(5vw + 20px);
+}
+
+.home h3 {
+	font-size: calc(1vw + 20px);
+}
+
+.slideshow li {
+	list-style: none;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-size: cover;
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	z-index: 0;
+	opacity: 0;
+	
+	
+	animation: imageSlide 50s linear infinite;
+}
+
+
+.slideshow li:nth-child(1){
+	background-image: url(/img/image1.jpeg);
+}
+.slideshow li:nth-child(2){
+	background-image: url(/img/image2.jpeg);
+	animation-delay: 10s;
+}
+.slideshow li:nth-child(3){
+	background-image: url(/img/image3.jpeg);
+	animation-delay: 20s;
+}
+.slideshow li:nth-child(4){
+	background-image: url(/img/image4.jpeg);
+	animation-delay: 30s;
+}
+.slideshow li:nth-child(5){
+	background-image: url(/img/image5.jpeg);
+	animation-delay: 40s;
+}
+
+
+@keyframes imageSlide {
+	0% {
+		opacity: 0;
+		animation-timing-function: ease-in;
+	}
+	10% {
+		opacity: 1;
+		animation-timing-function: ease-out;
+	}
+	20% {
+		opacity: 1;
+	}
+	30% {
+		opacity: 0;
+	}
 }
 

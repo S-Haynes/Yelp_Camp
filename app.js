@@ -21,7 +21,6 @@ app.set('view engine', 'ejs');
 
 // MONGOOSE SCHEMA SETUP
 
-
 // comment schema
 let commentSchema = new mongoose.Schema({
 	text: String,
@@ -32,7 +31,7 @@ let commentSchema = new mongoose.Schema({
 		},
 		username: String
 	}
-})
+});
 
 let Comment = mongoose.model('Comment', commentSchema);
 
@@ -286,7 +285,7 @@ app.post('/signup', function(req, res){
 //login 
 app.get('/login', function(req, res){
 	res.render('auth/login')
-})
+});
 
 app.post('/login', passport.authenticate('local', {
 	successRedirect: '/', 
