@@ -25,7 +25,8 @@ html, body {
 }
 
 .thumbnail.index img {
-	height: 150px;
+	min-height: 150px;
+	max-height: 150px;
 }
 
 .home {
@@ -61,6 +62,10 @@ html, body {
 
 .home h3 {
 	font-size: calc(1vw + 20px);
+}
+
+.btn-default {
+	color: steelblue;
 }
 
 .slideshow li {
@@ -117,5 +122,11 @@ html, body {
 	30% {
 		opacity: 0;
 	}
+}
+
+@media(max-width: 767px){
+	.thumbnail.index img {
+	max-height: 300px;
+}
 }
 
