@@ -2,9 +2,10 @@ const express = require('express');
 const router  = express.Router({mergeParams: true});
 const Campground = require('../models/campground');
 const Comment = require('../models/comment');
+const middleware = require('../middleware/middleware.js');
 
-
-router.get('/new', checkLoginStatus, function(req, res){
+//create comment route
+router.get('/new', middleware.checkLoginStatus, function(req, res){
 	Campground.findById(req.params.id, function(err, campground){
 		if(err){
 			console.log(err)
@@ -15,7 +16,7 @@ router.get('/new', checkLoginStatus, function(req, res){
 
 });
 
-router.post('/', checkLoginStatus, function(req, res){
+router.post('/', middleware.checkLoginStatus, function(req, res){
 
 	Campground.findById(req.params.id, function(err, campground){
 		if(err){
@@ -39,8 +40,8 @@ router.post('/', checkLoginStatus, function(req, res){
 	
 });
 
-//update comment
-router.get('/:comment_id/edit', checkLoginStatus, function(req, res){
+//update comment route
+router.get('/:comment_id/edit', middleware.checkLoginStatus, function(req, res){
 
 	Campground.findById(req.params.id, function(err, campground){
 		if(err){
@@ -69,8 +70,8 @@ router.put('/:comment_id', function(req, res){
 		}
 	});
 });
-//delete comment
 
+//delete comment route
 router.delete('/:comment_id', function(req, res){
 	Comment.findByIdAndRemove(req.params.comment_id, function(err){
 		if(err){
@@ -80,13 +81,5 @@ router.delete('/:comment_id', function(req, res){
 		}
 	});
 });
-
-function checkLoginStatus(req, res, next){
-	if(req.isAuthenticated()){
-		return next();
-	} 
-	req.flash('error', 'You need to log in to do that.');
-	res.redirect('/login');
-}
 
 module.exports = router;

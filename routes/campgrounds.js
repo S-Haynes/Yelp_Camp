@@ -1,8 +1,9 @@
 const express 	 = require('express');
 const router  	 = express.Router();
 const Campground = require('../models/campground');
+const middleware = require('../middleware/middleware.js');
 
-
+//campground index route
 router.get('/', function(req, res){
 	let perPage = 8;
 	let pageQuery = parseInt(req.query.page);
@@ -27,7 +28,12 @@ router.get('/', function(req, res){
 
 });
 
-router.post('/', checkLoginStatus, function(req, res){
+//campground create routes
+router.get("/new", middleware.checkLoginStatus, function(req, res){
+	res.render('campgrounds/new');
+});
+
+router.post('/', middleware.checkLoginStatus, function(req, res){
 	let name = req.body.name;
 	let image = req.body.image;
 	let desc = req.body.description;
@@ -46,12 +52,8 @@ router.post('/', checkLoginStatus, function(req, res){
 
 });
 
-//create a campground
-router.get("/new", checkLoginStatus, function(req, res){
-	res.render('campgrounds/new');
-});
 
-//review a campground
+//campground review route
 router.get("/:id", function(req, res){
 	//find the campground with provided ID
 	let id = req.params.id
@@ -68,8 +70,8 @@ router.get("/:id", function(req, res){
 	
 });
 
-//update a campground
-router.get("/:id/edit", checkLoginStatus, function(req, res){
+//campground update routes
+router.get("/:id/edit", middleware.checkLoginStatus, function(req, res){
 	Campground.findById(req.params.id, function(err, campground){
 		if(err){
 			req.flash('error', 'Something went wrong. Try again.')
@@ -80,7 +82,7 @@ router.get("/:id/edit", checkLoginStatus, function(req, res){
 	});	
 });
 
-router.put('/:id', checkLoginStatus, function(req, res){
+router.put('/:id', middleware.checkLoginStatus, function(req, res){
 	Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, campground){
 		if(err){
 			console.log(err)
@@ -92,7 +94,8 @@ router.put('/:id', checkLoginStatus, function(req, res){
 });
 
 
-router.delete('/:id', checkLoginStatus, function(req, res){
+// campground delete route
+router.delete('/:id', middleware.checkLoginStatus, function(req, res){
 	Campground.findByIdAndRemove(req.params.id, function(err){
 		if(err){
 			console.log(err)
@@ -101,14 +104,5 @@ router.delete('/:id', checkLoginStatus, function(req, res){
 		}
 	});
 });
-
-function checkLoginStatus(req, res, next){
-	if(req.isAuthenticated()){
-		return next();
-	} 
-	req.flash('error', 'You need to log in to do that.');
-	res.redirect('/login');
-}
-
 
 module.exports = router;

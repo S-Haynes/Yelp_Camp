@@ -1,12 +1,15 @@
 const express  = require('express');
 const router   = express.Router();
 const User     = require('../models/user');
-const passport = require('passport')
+const passport = require('passport');
+const middleware = require('../middleware/middleware.js');
 
+// home route
 router.get('/', function(req, res){
 	res.render('home');
 });
 
+// signup routes
 router.get('/signup', function(req, res){
 	res.render('auth/signup')
 });
@@ -29,7 +32,7 @@ router.post('/signup', function(req, res){
 	});	
 });
 
-//login 
+//login routes
 router.get('/login', function(req, res){
 	res.render('auth/login');
 });
@@ -43,20 +46,11 @@ function(req, res){
 	res.redirect('/campgrounds');
 });
 
-//logout
-
-router.get('/logout', checkLoginStatus, function(req, res){
+//logout route
+router.get('/logout', middleware.checkLoginStatus, function(req, res){
 	req.flash('success', 'Logged out successfully. Visit us again, ' + req.user.username + '.')
 	req.logout();
 	res.redirect('/campgrounds')
 });
-
-function checkLoginStatus(req, res, next){
-	if(req.isAuthenticated()){
-		return next();
-	} 
-	req.flash('error', 'You need to log in to do that.');
-	res.redirect('/login');
-}
 
 module.exports = router;

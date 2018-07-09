@@ -30,7 +30,7 @@ app.locals.moment = require('moment');
 //set view engine to ejs
 app.set('view engine', 'ejs');
 
-//auth config
+//express session config
 app.use(session({
 	secret: 'this is an awesome website luci created',
 	resave: false,
@@ -58,14 +58,7 @@ app.use('/', indexRoutes);
 app.use('/campgrounds/:id/comments', commentRoutes);
 app.use('/campgrounds', campgroundRoutes);
 
-function checkLoginStatus(req, res, next){
-	if(req.isAuthenticated()){
-		return next();
-	} 
-	req.flash('error', 'You need to log in to do that.');
-	res.redirect('/login');
-}
-// listen on port 4000 for server startup
+// listen on port 3000 for server startup
 app.listen(process.env.PORT || 3000, function(){
 	console.log('server started');
 });
