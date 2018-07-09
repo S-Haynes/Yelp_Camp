@@ -7,7 +7,11 @@ const LocalStrategy 		= require('passport-local');
 const passportLocalMongoose = require('passport-local-mongoose');
 const methodOverride 		= require('method-override');
 const session 				= require('express-session');
-const flash 				= require('connect-flash')
+const flash 				= require('connect-flash');
+const Comment 				= require('./models/comment');
+const User 					= require('./models/user');
+const Campground            = require('./models/campground');
+
 
 // create a yelpcamp database
 mongoose.connect('mongodb://localhost/yelp_camp');
@@ -20,63 +24,6 @@ app.locals.moment = require('moment');
 
 //set view engine to ejs
 app.set('view engine', 'ejs');
-
-// MONGOOSE SCHEMA SETUP
-
-// comment schema
-let commentSchema = new mongoose.Schema({
-	text: String,
-	author: {
-		id: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "User"
-		},
-		username: String
-	},
-	created: {
-		type: Date,
-		default: Date.now
-	}
-});
-
-let Comment = mongoose.model('Comment', commentSchema);
-
-//campground schema
-let campgroundSchema = new mongoose.Schema({
-	name: String,
-	image: String,
-	description: String,
-	comments: [
-	{
-		type: mongoose.Schema.Types.ObjectId,
-		ref: "Comment"
-	}
-	],
-	author: {
-		id: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "User"
-		},
-		username: String
-	},
-	created: {
-		type: Date,
-		default: Date.now
-	}
-});
-
-let Campground = mongoose.model("Campground", campgroundSchema);
-
-//user schema 
-
-let userSchema = new mongoose.Schema({
-	username: String,
-	password: String
-});
-
-userSchema.plugin(passportLocalMongoose);
-
-let User = mongoose.model('User', userSchema);
 
 //auth config
 app.use(session({
@@ -123,9 +70,9 @@ app.get('/campgrounds', function(req, res){
 
 				});
 			}
-		})
+		});
 		
-	})
+	});
 
 });
 
@@ -144,7 +91,7 @@ app.post('/campgrounds', checkLoginStatus, function(req, res){
 			campground.save();
 			res.redirect('/campgrounds');
 		}
-	})
+	});
 
 });
 
@@ -201,7 +148,7 @@ app.delete('/campgrounds/:id', checkLoginStatus, function(req, res){
 		} else {
 			res.redirect('/campgrounds')
 		}
-	})
+	});
 });
 
 
