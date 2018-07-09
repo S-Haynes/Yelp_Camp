@@ -11,6 +11,9 @@ html, body {
 	position: relative;
 	z-index: -1;
 }
+.comment {
+	margin-bottom: 20px;
+}
 
 .inline {
 	display: inline;

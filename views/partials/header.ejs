@@ -27,3 +27,20 @@
 		</div>
 	</div>
 </nav>
+
+<div class="container">
+	<div>
+		<div>
+			<% if(error.length > 0){ %>
+			<div class="alert alert-danger">
+				<p><%= error %></p>
+			</div>
+				
+			<% } else if(success.length > 0){ %>
+			<div class="alert alert-success">
+				<p><%= success %></p>
+			</div>
+			<% } %>
+		</div>
+	</div>
+</div>

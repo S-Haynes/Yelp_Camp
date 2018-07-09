@@ -7,7 +7,7 @@
 				<img src="<%= campground.image %>">
 				<div class="caption">
 					<p><%= campground.description %></p>
-					<p>Submitted by <%= campground.author.username %></p>
+					<p><strong>Submitted by <%= campground.author.username %>, <%= moment(campground.created).fromNow()%></strong></p>
 					<% if(currentUser && currentUser._id.equals(campground.author.id)){ %>
 					<a class="btn btn-warning btn-xs inline" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
 					<form class="inline" action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST">
@@ -23,15 +23,19 @@
 					</p>
 					<hr>
 					<% campground.comments.forEach(function(comment){ %>
-						<p><%= comment.author.username %></p>
-						<p><%= comment.text %></p>
+					<div class="comment">
+						<div><strong><%= comment.author.username %></strong></div>
+						<p><span style="visibility: hidden">..</span><%= comment.text %>
+							<span class="pull-right"><%= moment(comment.created).fromNow() %></span></p>
 						<% if(currentUser && currentUser._id.equals(comment.author.id)){ %>
 						<a class="btn btn-warning btn-xs inline" href="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>/edit">Edit</a>
 						<form class="inline" action="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
 						 <button class="btn btn-danger btn-xs">Delete</button>
 						</form>
 					<% } %>
+						</div>
 					<% }) %>	
+					
 				</div>
 				
 		
