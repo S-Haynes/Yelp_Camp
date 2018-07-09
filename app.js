@@ -47,10 +47,10 @@ let campgroundSchema = new mongoose.Schema({
 	image: String,
 	description: String,
 	comments: [
-		{
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "Comment"
-		}
+	{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "Comment"
+	}
 	],
 	author: {
 		id: {
@@ -100,22 +100,31 @@ app.use(function(req, res, next){
 });
 
 
-	
-
 //Campground Routes
 app.get('/', function(req, res){
 	res.render('home');
 });
 
 app.get('/campgrounds', function(req, res){
-
+	let perPage = 8;
+	let pageQuery = parseInt(req.query.page);
+	let pageNumber = pageQuery ? pageQuery : 1;
 	//get all campgrounds from DB
-	Campground.find({}, function(err, campgrounds){
-		if(err){
-			console.log(err)
-		} else {
-			res.render('campgrounds/index', {campgrounds: campgrounds});
-		}
+	Campground.find({}).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function(err, campgrounds){
+		
+		Campground.count().exec(function(err, count){
+			if(err){
+				console.log(err)
+			} else {
+				res.render('campgrounds/index', {
+					campgrounds: campgrounds,
+					current: pageNumber,
+					pages: Math.ceil(count / perPage)
+
+				});
+			}
+		})
+		
 	})
 
 });
@@ -311,7 +320,7 @@ app.post('/login', passport.authenticate('local', {
 	failureRedirect: '/login',
 	failureFlash: true
 }), 
-	function(req, res){
+function(req, res){
 	req.flash('success', 'Welcome back, ' + req.user.username + '.');
 	res.redirect('/campgrounds');
 });
